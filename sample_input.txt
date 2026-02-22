@@ -1,0 +1,120 @@
+# =============================================
+# BASIC COMMAND TESTS
+# =============================================
+
+# Add simple wagons (cargo comes BEFORE destination)
+ADD_WAGON 101 COAL ANKARA 100 200
+ADD_WAGON 102 MAIL ADANA 80 150
+ADD_WAGON 103 LIVESTOCK IZMIR 120 250
+ADD_WAGON 104 COAL ANKARA 90 220
+ADD_WAGON 105 COAL ESKISEHIR 110 180
+
+# Print current classification yard
+PRINT_YARD
+
+# Remove one wagon to test REMOVE_WAGON
+REMOVE_WAGON 104
+PRINT_YARD
+
+# Assemble one train
+ASSEMBLE_TRAIN ANKARA
+PRINT_TRACK ANKARA
+PRINT_YARD
+
+# =============================================
+# SINGLE COUPLER SPLIT TEST
+# =============================================
+
+# Create wagons that force one split
+ADD_WAGON 201 COAL ADANA 150 200
+ADD_WAGON 202 COAL ADANA 250 180
+ADD_WAGON 203 COAL ADANA 100 300
+
+ASSEMBLE_TRAIN ADANA
+PRINT_TRACK ADANA
+
+# =============================================
+# MULTIPLE SPLITS TEST
+# =============================================
+
+# Each pair causes a chain split
+ADD_WAGON 301 COAL IZMIR 300 400
+ADD_WAGON 302 COAL IZMIR 350 250
+ADD_WAGON 303 COAL IZMIR 500 200
+ADD_WAGON 304 COAL IZMIR 600 180
+# The tail wagons exceed coupler load multiple times
+
+ASSEMBLE_TRAIN IZMIR
+PRINT_TRACK IZMIR
+
+
+# =========================================================
+#  HAZARDOUS CARGO TEST
+# =========================================================
+ADD_WAGON 401 HAZARDOUS IZMIR 90 250
+ADD_WAGON 402 COAL IZMIR 120 300
+ADD_WAGON 403 HAZARDOUS IZMIR 200 200
+ASSEMBLE_TRAIN IZMIR
+PRINT_TRACK IZMIR
+
+
+# =============================================
+# AUTO-DISPATCH MODE TEST
+# =============================================
+
+# Enable auto dispatch
+AUTO_DISPATCH ON
+
+# Add heavy wagons that trigger auto dispatch when trains exceed threshold
+ADD_WAGON 401 MAIL ANKARA 800 900
+ADD_WAGON 402 MAIL ANKARA 900 950
+ADD_WAGON 403 MAIL ANKARA 700 800
+ADD_WAGON 404 MAIL ANKARA 950 950
+ADD_WAGON 405 MAIL ANKARA 600 750
+
+ASSEMBLE_TRAIN ANKARA
+PRINT_TRACK ANKARA
+
+# Disable auto dispatch again
+AUTO_DISPATCH OFF
+
+# =============================================
+# WAITING LINE - CORRECT DEPARTURE
+# =============================================
+
+# Add wagons for two separate trains, ensure correct dispatch order
+ADD_WAGON 501 LIVESTOCK ESKISEHIR 200 300
+ADD_WAGON 502 LIVESTOCK ESKISEHIR 250 350
+ASSEMBLE_TRAIN ESKISEHIR
+
+ADD_WAGON 503 LIVESTOCK ESKISEHIR 180 250
+ADD_WAGON 504 LIVESTOCK ESKISEHIR 190 260
+ASSEMBLE_TRAIN ESKISEHIR
+
+PRINT_TRACK ESKISEHIR
+DISPATCH_TRAIN ESKISEHIR
+PRINT_TRACK ESKISEHIR
+
+# =========================================================
+#  ERROR HANDLING TESTS
+# =========================================================
+
+# Unknown command
+FLY_TRAIN ANKARA
+
+# Dispatch when empty
+DISPATCH_TRAIN ANKARA
+DISPATCH_TRAIN ANKARA
+
+# Assemble with no wagons available
+ASSEMBLE_TRAIN OTHERS
+
+# Invalid parameters (missing arguments)
+ADD_WAGON 999 COAL
+
+# =============================================
+# RESET TEST
+# =============================================
+
+CLEAR
+PRINT_YARD
