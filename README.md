@@ -206,3 +206,7 @@ Train Train_ADANA_1 split due to coupler overload before Wagon 201
 - `WagonList` copy constructor and copy assignment are **deleted** — only move semantics are supported to avoid accidental deep copies.
 - Train names follow the pattern `Train_<DESTINATION>_<N>` and splits append `_split_<K>`.
 - The `AUTO_DISPATCH_LIMIT` constant (default **2 000 tons**) is defined in `TrainTrack.h`.
+
+## License
+
+This project is part of the BBM203 Data Structures course.
